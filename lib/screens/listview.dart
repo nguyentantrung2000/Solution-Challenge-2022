@@ -1,18 +1,20 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 void main() {
   runApp(ListView());
 }
 
-class ListView extends StatefulWidget {
+class ListViewPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return ListViewState();
+    return ListViewPageState();
   }
 }
 
-class ListViewState extends State<ListView> {
+class ListViewPageState extends State<ListViewPage> {
   void doingsomething() {}
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,6 +25,7 @@ class ListViewState extends State<ListView> {
               margin: EdgeInsets.all(20),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // ignore: prefer_const_literals_to_create_immutables
                   children: [
                     Text(
                       'Total cases: 4',
