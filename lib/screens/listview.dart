@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import './navigate.dart';
+
 void main() {
   runApp(ListView());
 }
@@ -15,22 +17,28 @@ class ListViewPage extends StatefulWidget {
 }
 
 class ListViewPageState extends State<ListViewPage> {
+  List cases = [
+    {"address": "180 Cao Thắng, Q.10, TP.HCM", "resolve": false, "num": 10},
+    {"address": "8 Nguyễn Văn Tráng, Q.1, TP.HCM", "resolve": false, "num": 7},
+    {"address": "279 Trần Nhân Tôn, Q.10, TP.HCM", "resolve": true, "num": 5},
+    {"address": "1 Đường số 19,BHHA,Q.Bình Tân...", "resolve": false, "num": 1}
+  ];
   void doingsomething() {}
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    print(size);
     return MaterialApp(
       home: Scaffold(
         body: (Column(
           children: [
             Container(
-              margin: EdgeInsets.all(20),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              width: size.width,
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   // ignore: prefer_const_literals_to_create_immutables
                   children: [
                     Text(
-                      'Total cases: 4',
+                      'Total cases: ${cases.length}',
                       style: TextStyle(
-                        fontFamily: 'Roboto',
                         fontSize: 20,
                         letterSpacing: 0.15,
                         fontWeight: FontWeight.w500,
@@ -39,7 +47,6 @@ class ListViewPageState extends State<ListViewPage> {
                     Text(
                       'Resolved: 1',
                       style: TextStyle(
-                          fontFamily: 'Roboto',
                           fontSize: 20,
                           letterSpacing: 0.15,
                           fontWeight: FontWeight.w500),
@@ -47,61 +54,95 @@ class ListViewPageState extends State<ListViewPage> {
                   ]),
             ),
             Container(
-              width: double.infinity,
               margin: EdgeInsets.only(top: 42),
               child: Column(
                 children: [
-                  ElevatedButton(
-                      onPressed: doingsomething,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(480, 58),
-                      ),
-                      child: Text('180 Cao Thắng, Q.10, TP.HCM')),
-                  SizedBox(height: 19),
-                  ElevatedButton(
-                      onPressed: doingsomething,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(480, 58),
-                      ),
-                      child: Text('180 Cao Thắng, Q.10, TP.HCM')),
-                  SizedBox(height: 19),
-                  ElevatedButton(
-                      onPressed: doingsomething,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(480, 58),
-                      ),
-                      child: Text('180 Cao Thắng, Q.10, TP.HCM')),
-                  SizedBox(height: 19),
-                  ElevatedButton(
-                      onPressed: doingsomething,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(480, 58),
-                      ),
-                      child: Text('180 Cao Thắng, Q.10, TP.HCM')),
+                  for (var i in cases)
+                    Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius:1,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0,10), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          child: ElevatedButton(
+                            onPressed: doingsomething,
+                            style: ElevatedButton.styleFrom(
+                              primary: i['resolve'] == true
+                                  ? Color(0xff219653)
+                                  : Color(0xffE0E0E0),
+                              minimumSize:
+                                  Size(size.width * 0.5, size.height * 0.07),
+                            ),
+                            child: Container(
+                              width: size.width * 0.8,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    i['address'],
+                                    style: TextStyle(
+                                        color: i['resolve'] == true
+                                            ? Color(0xffFFFFFF)
+                                            : Color(0xff000000),
+                                        letterSpacing: 0.5),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          IconData(0xe22d,
+                                              fontFamily: 'MaterialIcons'),
+                                          color: i['resolve'] == true
+                                              ? Color(0xffFFFFFF)
+                                              : Color(0xff000000),
+                                        ),
+                                        Text(
+                                          i['num'].toString(),
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              color: i['resolve'] == true
+                                                  ? Color(0xffFFFFFF)
+                                                  : Color(0xff000000)),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: size.height * 0.03),
+                      ],
+                    )
                 ],
               ),
             ),
-            Container(
-              width: double.infinity,
-              
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: doingsomething,
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(500, 58),
-                      primary: Colors.white,
-                      padding: EdgeInsets.all(20),
-                    ),
-                    child: Text(
-                      'CHILD ABUSING REPORT',
-                      style: TextStyle(color: Color.fromRGBO(33, 150, 83, 1)),
-                    ),
-                  ),
-                ],
+            SizedBox(height: size.height * 0.35),
+            ElevatedButton(
+              onPressed: doingsomething,
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(size.width, size.height * 0.07),
+                primary: Colors.white,
               ),
-            )
+              child: Text(
+                'CHILD ABUSING REPORT',
+                style: TextStyle(
+                    color: Color(0xff219653),
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 1.25),
+              ),
+            ),
           ],
         )),
       ),
