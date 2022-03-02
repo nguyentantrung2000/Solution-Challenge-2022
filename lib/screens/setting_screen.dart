@@ -27,15 +27,47 @@ class _SettingState extends State<Setting> {
             const SizedBox(height: 10),
             Text('Language',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
             SizedBox(
               width: size.width,
-              child: DropdownButton<String>(
-                value: value,
-                isExpanded: true,
-                items: language.map(buildMenuItem).toList(),
-                onChanged: (value) => setState(() => this.value = value),
+              child: Container(
+                height: 45,
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    // blurRadius: 2,
+                    offset: Offset(0,4),
+                  )
+                ],
+                
+                color: Colors.grey.shade300,
+
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    iconSize: 26,
+                    style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
+                    value: value,
+                    // style: TextStyle(fontWeight: FontWeight.bold),
+                    isExpanded: true,
+                    items: language.map(buildMenuItem).toList(),
+                    onChanged: (value) => setState(() => this.value = value),
+                  ),
+                ),
               ),
-            )
+            ),
+          const SizedBox(height: 35),
+           ElevatedButton(
+             style: ElevatedButton.styleFrom(
+              minimumSize: Size(500, 40),
+
+              primary: Color.fromRGBO(33, 150, 83, 1)
+             ),
+             onPressed: (){}, 
+             child: Text('GRANT LOCATION PERMISSION'))
           ],
         ),
       ),
