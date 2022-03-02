@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import './navigate.dart';
 
 void main() {
   runApp(ListView());
