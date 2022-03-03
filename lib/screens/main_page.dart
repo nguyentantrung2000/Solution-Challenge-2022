@@ -13,7 +13,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
    int currentIndex = 0;
-  List screens = [Map(), ListViewPage(), Setting()];
+  List screens = [MapPage(), ListViewPage(), Setting()];
   void onTap(int index) {
     setState(() {
       currentIndex = index;

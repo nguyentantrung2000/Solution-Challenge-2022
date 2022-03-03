@@ -1,17 +1,13 @@
-import 'package:challenge/screens/listview.dart';
-import 'package:challenge/screens/report_form.dart';
-import 'package:challenge/screens/setting_screen.dart';
-import 'package:challenge/screens/map_screen.dart';
 import 'package:flutter/material.dart';
 
-class Maps extends StatefulWidget {
-  const Maps({Key? key}) : super(key: key);
+class MapPage extends StatefulWidget {
+  const MapPage({Key? key}) : super(key: key);
 
   @override
-  State<Maps> createState() => _MapsState();
+  State<MapPage> createState() => _MapPageState();
 }
 
-class _MapsState extends State<Maps> {
+class _MapPageState extends State<MapPage> {
  
 
   @override

@@ -16,14 +16,18 @@ class _SettingState extends State<Setting> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Setting'),
+        elevation: 0,
+      ),
       body: Padding(
-        padding: EdgeInsets.only(top: 90, left: 30, right: 30),
+        padding: EdgeInsets.only(top: 30, left: 30, right: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           // ignore: prefer_const_literals_to_create_immutables
           children: [
-            Text('Setting',
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+            // Text('Setting',
+            //     style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             Text('Language',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
