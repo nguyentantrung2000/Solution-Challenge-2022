@@ -22,8 +22,10 @@ class ListViewPageState extends State<ListViewPage> {
     {"address": "279 Trần Nhân Tôn, Q.10, TP.HCM", "resolve": true, "num": 5},
     {"address": "1 Đường số 19,BHHA,Q.Bình Tân...", "resolve": false, "num": 1}
   ];
+
   void doingsomething() {}
   Widget build(BuildContext context) {
+
     Size size = MediaQuery.of(context).size;
     print(size);
     return MaterialApp(
@@ -32,6 +34,10 @@ class ListViewPageState extends State<ListViewPage> {
           children: [
             Container(
               width: size.width,
+              margin: EdgeInsets.only(
+                  top: size.height * 0.05,
+                  left: size.width * 0.03,
+                  right: size.width * 0.03),
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   // ignore: prefer_const_literals_to_create_immutables
                   children: [
@@ -44,7 +50,7 @@ class ListViewPageState extends State<ListViewPage> {
                       ),
                     ),
                     Text(
-                      'Resolved: 1',
+                      'Resolved: ${(cases.where((x) => x['resolve'] ==true).toList().length)}',
                       style: TextStyle(
                           fontSize: 20,
                           letterSpacing: 0.15,
@@ -53,7 +59,7 @@ class ListViewPageState extends State<ListViewPage> {
                   ]),
             ),
             Container(
-              margin: EdgeInsets.only(top: 42),
+              margin: EdgeInsets.only(top: size.height * 0.06),
               child: Column(
                 children: [
                   for (var i in cases)
@@ -64,10 +70,10 @@ class ListViewPageState extends State<ListViewPage> {
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
-                                spreadRadius:1,
+                                spreadRadius: 1,
                                 blurRadius: 7,
                                 offset:
-                                    Offset(0,10), // changes position of shadow
+                                    Offset(0, 10), // changes position of shadow
                               ),
                             ],
                           ),
@@ -127,21 +133,37 @@ class ListViewPageState extends State<ListViewPage> {
               ),
             ),
             SizedBox(height: size.height * 0.35),
-            ElevatedButton(
-              onPressed: doingsomething,
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(size.width, size.height * 0.07),
-                primary: Colors.white,
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 0.2,
+                    blurRadius: 20,
+                    offset: Offset(0, -6), // changes position of shadow
+                  ),
+                ],
               ),
-              child: Text(
-                'CHILD ABUSING REPORT',
-                style: TextStyle(
-                    color: Color(0xff219653),
-                    fontWeight: FontWeight.w500,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 1.25),
+              width: size.width,
+              child: ElevatedButton(
+                onPressed: doingsomething,
+                style: ElevatedButton.styleFrom(
+                    minimumSize: Size(size.width, size.height * 0.07),
+                    primary: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)))),
+                child: Text(
+                  'CHILD ABUSING REPORT',
+                  style: TextStyle(
+                      color: Color(0xff219653),
+                      fontWeight: FontWeight.w500,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 1.25),
+                ),
               ),
-            ),
+            )
           ],
         )),
       ),
