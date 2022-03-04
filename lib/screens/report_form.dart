@@ -105,7 +105,7 @@ class _ReportState extends State<Report> {
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: const [
                     SizedBox(height: 2.2),
                     Text("Envidences (Videos, photos, audios)",
                         style: TextStyle(fontSize: 16)),
@@ -130,6 +130,20 @@ class _ReportState extends State<Report> {
                       onPressed: () => {},
                       child: Icon(Icons.add)),
                 ),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/owl.jpeg',
+                      height: 85,
+                      width: 85,
+                    ),
+                    Image.asset(
+                      'assets/images/cow17.png',
+                      height: 85,
+                      width: 85,
+                    )
+                  ],
+                )
               ],
             ),
             SizedBox(
@@ -149,6 +163,7 @@ class _ReportState extends State<Report> {
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  // ignore: prefer_const_literals_to_create_immutables
                   children: [
                     SizedBox(height: 2.2),
                     Text("More details", style: TextStyle(fontSize: 16)),
@@ -164,7 +179,7 @@ class _ReportState extends State<Report> {
               keyboardType: TextInputType.multiline,
               maxLines: null,
               decoration: const InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
+                  contentPadding: EdgeInsets.symmetric(
                       vertical: 60.0, horizontal: 5.0),
                   border: OutlineInputBorder()),
             ),
@@ -178,28 +193,6 @@ class _ReportState extends State<Report> {
             SizedBox(
               height: size.height * 0.03,
             ),
-            // Padding(padding: EdgeInsets.only(top: 17)),
-            // Center(
-            //   child: Container(
-            //     margin: const EdgeInsets.only(right: 22, left: 22),
-            //     child: TextField(
-            //       obscureText: false,
-            //       decoration: InputDecoration(
-            //         border: OutlineInputBorder(),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // Padding(padding: EdgeInsets.only(top: 29)),
-            // Center(
-            //   child: Container(
-            //       width: 340.0,
-            //       child: Text(
-            //         'BY SUBMITTING THE REPORT, I HEREBY CONFIRM THAT THE ABOVE INFORMATION IS TRUE AND CORRECT',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       )),
-            // ),
-            // Padding(padding: EdgeInsets.only(top: 40)),
             Container(
               // width: 340.0,
               child: ElevatedButton(

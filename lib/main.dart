@@ -4,7 +4,7 @@ import 'package:challenge/screens/report_form.dart';
 import 'package:challenge/screens/setting_screen.dart';
 import 'package:challenge/screens/map_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:challenge/screens/test.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-        home: MainPage(
+        home: Report(
         ));
   }
 }
