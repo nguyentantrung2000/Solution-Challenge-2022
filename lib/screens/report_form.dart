@@ -2,6 +2,10 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class Report extends StatefulWidget {
   const Report({Key? key}) : super(key: key);
@@ -11,6 +15,32 @@ class Report extends StatefulWidget {
 }
 
 class _ReportState extends State<Report> {
+  PickedFile? imageURI;
+  List<PickedFile> _imageList = [];
+  final ImagePicker _picker = ImagePicker();
+
+  Future getImage() async {
+    final PickedFile? image =
+        await _picker.getImage(source: ImageSource.gallery);
+    if (image!.path.isNotEmpty) {
+      _imageList.add(image);
+    }
+    setState(() {
+      imageURI = image;
+    });
+  }
+
+  void _getData() {
+    FirebaseFirestore.instance
+        .collection('test')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        print(doc["name"]);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     TextEditingController _moreDetials = TextEditingController();
@@ -23,7 +53,8 @@ class _ReportState extends State<Report> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text('Child Abusing Report',
-            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 24)),
+            style: TextStyle(
+                color: Color.fromARGB(255, 255, 255, 255), fontSize: 24)),
         backgroundColor: Color(0xff219653),
         bottomOpacity: 0.0,
         elevation: 0.0,
@@ -105,6 +136,7 @@ class _ReportState extends State<Report> {
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  // ignore: prefer_const_literals_to_create_immutables
                   children: [
                     SizedBox(height: 2.2),
                     Text("Envidences (Videos, photos, audios)",
@@ -127,9 +159,19 @@ class _ReportState extends State<Report> {
                         primary: Color(0xffE5E5E5),
                         onPrimary: Color.fromARGB(255, 0, 0, 0),
                       ),
-                      onPressed: () => {},
+                      onPressed: () => {getImage()},
                       child: Icon(Icons.add)),
                 ),
+                Row(
+                  children: [
+                    _imageList.length == 0
+                        ? Text("")
+                        : Row(children: <Widget>[
+                            for (var i = 0; i < _imageList.length; i++)
+                              Image.file(File(_imageList[i].path), height: 85)
+                          ])
+                  ],
+                )
               ],
             ),
             SizedBox(
@@ -149,7 +191,7 @@ class _ReportState extends State<Report> {
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: const [
                     SizedBox(height: 2.2),
                     Text("More details", style: TextStyle(fontSize: 16)),
                   ],
@@ -164,6 +206,7 @@ class _ReportState extends State<Report> {
               keyboardType: TextInputType.multiline,
               maxLines: null,
               decoration: const InputDecoration(
+                  // ignore: unnecessary_const
                   contentPadding: const EdgeInsets.symmetric(
                       vertical: 60.0, horizontal: 5.0),
                   border: OutlineInputBorder()),
@@ -178,28 +221,6 @@ class _ReportState extends State<Report> {
             SizedBox(
               height: size.height * 0.03,
             ),
-            // Padding(padding: EdgeInsets.only(top: 17)),
-            // Center(
-            //   child: Container(
-            //     margin: const EdgeInsets.only(right: 22, left: 22),
-            //     child: TextField(
-            //       obscureText: false,
-            //       decoration: InputDecoration(
-            //         border: OutlineInputBorder(),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // Padding(padding: EdgeInsets.only(top: 29)),
-            // Center(
-            //   child: Container(
-            //       width: 340.0,
-            //       child: Text(
-            //         'BY SUBMITTING THE REPORT, I HEREBY CONFIRM THAT THE ABOVE INFORMATION IS TRUE AND CORRECT',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       )),
-            // ),
-            // Padding(padding: EdgeInsets.only(top: 40)),
             Container(
               // width: 340.0,
               child: ElevatedButton(
@@ -210,7 +231,6 @@ class _ReportState extends State<Report> {
                     padding: EdgeInsets.all(8.0),
                   ),
                   onPressed: () {
-                    /*...*/
                   },
                   child: Align(
                     alignment: Alignment.center,
