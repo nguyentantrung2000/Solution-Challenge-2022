@@ -31,7 +31,9 @@ class ListViewPageState extends State<ListViewPage> {
     return MaterialApp(
       home: Scaffold(
         body: (Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            
             Container(
               width: size.width,
               margin: EdgeInsets.only(
@@ -59,7 +61,7 @@ class ListViewPageState extends State<ListViewPage> {
                   ]),
             ),
             Container(
-              margin: EdgeInsets.only(top: size.height * 0.06),
+              padding: EdgeInsets.only(bottom: size.height *0.35),
               child: Column(
                 children: [
                   for (var i in cases)
@@ -132,9 +134,11 @@ class ListViewPageState extends State<ListViewPage> {
                 ],
               ),
             ),
-            SizedBox(height: size.height * 0.35),
+      
             Container(
+       
               decoration: BoxDecoration(
+              
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
