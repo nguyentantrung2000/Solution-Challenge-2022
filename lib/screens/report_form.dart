@@ -1,11 +1,15 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:challenge/api/firebase_api.dart';
+import 'package:challenge/widget/button_widget.dart';
+import 'package:flutter/services.dart';
+import 'package:path/path.dart';
 
 class Report extends StatefulWidget {
   const Report({Key? key}) : super(key: key);
@@ -15,29 +19,57 @@ class Report extends StatefulWidget {
 }
 
 class _ReportState extends State<Report> {
-  PickedFile? imageURI;
-  List<PickedFile> _imageList = [];
-  final ImagePicker _picker = ImagePicker();
+  CollectionReference reports =
+      FirebaseFirestore.instance.collection('reports');
 
-  Future getImage() async {
-    final PickedFile? image =
-        await _picker.getImage(source: ImageSource.gallery);
-    if (image!.path.isNotEmpty) {
-      _imageList.add(image);
+  UploadTask? task;
+  File? imageURI;
+  final ImagePicker _picker = ImagePicker();
+  List<XFile> _imageList = [];
+
+  Future selectFile() async {
+    try {
+      final List<XFile>? images = await _picker.pickMultiImage();
+      setState(() {
+        _imageList = images!;
+      });
+    } catch (e) {
+      print(e);
     }
-    setState(() {
-      imageURI = image;
-    });
   }
 
-  void _getData() {
-    FirebaseFirestore.instance
-        .collection('test')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        print(doc["name"]);
-      });
+  Future _uploadReport() async {
+    if (_imageList.length == 0) return;
+
+    final _id = DateTime.now().millisecondsSinceEpoch;
+    var _imageURL = [];
+    for (var i = 0; i < _imageList.length; i++) {
+      var file = File(_imageList[i].path);
+      final fileName = basename(file.path);
+      final destination = '$_id/$fileName';
+      task = FirebaseApi.uploadFile(destination, file);
+
+      if (task == null) return;
+
+      final snapshot = await task!.whenComplete(() {});
+      final urlDownload = await snapshot.ref.getDownloadURL();
+      _imageURL.add(urlDownload);
+    }
+
+    reports.add({
+      "address": "180 Cao Thắng, Q.10, TP.HCM",
+      "optional": "Room 8, Floor 5",
+      "imagesURL": _imageURL,
+      "details": "",
+      "X": '10.7746011',
+      "Y": '106.6755312',
+      "time": _id,
+      "id": _id
+    }).then((value) => {
+      print('Create report successflly!!!')
+    })
+    .catchError((onError)=>{
+      print('Create report failed!!!')
     });
   }
 
@@ -159,7 +191,7 @@ class _ReportState extends State<Report> {
                         primary: Color(0xffE5E5E5),
                         onPrimary: Color.fromARGB(255, 0, 0, 0),
                       ),
-                      onPressed: () => {getImage()},
+                      onPressed: () => {selectFile()},
                       child: Icon(Icons.add)),
                 ),
                 Row(
@@ -231,6 +263,7 @@ class _ReportState extends State<Report> {
                     padding: EdgeInsets.all(8.0),
                   ),
                   onPressed: () {
+                    _uploadReport();
                   },
                   child: Align(
                     alignment: Alignment.center,
