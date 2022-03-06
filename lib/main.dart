@@ -6,6 +6,7 @@ import 'package:challenge/screens/map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:challenge/screens/details.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-        home: const Report(
+        home: detail(
         ));
   }
 }
