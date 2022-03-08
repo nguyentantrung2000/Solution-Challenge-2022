@@ -10,7 +10,12 @@ import 'package:challenge/screens/details.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      options: FirebaseOptions(
+          apiKey: 'AIzaSyAUX0GTWAzrESmBsBzIzfiRhY_byZg_gLc',
+          appId: '1:977464866865:web:df136f0d798ca69df33d10',
+          messagingSenderId: '977464866865',
+          projectId: 'flutter-solutionch-202'));
   runApp(const MyApp());
 }
 
@@ -26,8 +31,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-        home: detail(
-        ));
+        home: detail());
   }
 }
 
@@ -41,12 +45,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: screens[currentIndex],
-    
-    );
+        // body: screens[currentIndex],
+
+        );
   }
 }
