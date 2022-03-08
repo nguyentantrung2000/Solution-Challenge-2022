@@ -1,3 +1,4 @@
+import 'package:challenge/screens/landingpage_1.dart';
 import 'package:challenge/screens/listview.dart';
 import 'package:challenge/screens/main_page.dart';
 import 'package:challenge/screens/report_form.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-        home: const Report(
+        home: const landingPage(
         ));
   }
 }
