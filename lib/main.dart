@@ -10,12 +10,29 @@ import 'package:challenge/screens/details.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
+  FirebaseApp app;
+  try {
+    app = await Firebase.initializeApp(
       options: FirebaseOptions(
-          apiKey: 'AIzaSyAUX0GTWAzrESmBsBzIzfiRhY_byZg_gLc',
-          appId: '1:977464866865:web:df136f0d798ca69df33d10',
-          messagingSenderId: '977464866865',
-          projectId: 'flutter-solutionch-202'));
+          apiKey: "AIzaSyAUX0GTWAzrESmBsBzIzfiRhY_byZg_gLc",
+          authDomain: "flutter-solutionch-202.firebaseapp.com",
+          projectId: "flutter-solutionch-202",
+          storageBucket: "flutter-solutionch-202.appspot.com",
+          messagingSenderId: "977464866865",
+          appId: "1:977464866865:web:df136f0d798ca69df33d10",
+          measurementId: "G-105WSXEVB0" // Your projectId
+          ),
+    );
+  } on FirebaseException catch (e) {
+    if (e.code == 'duplicate-app') {
+      app = Firebase.app();
+    } else {
+      throw e;
+    }
+  } catch (e) {
+    print(e);
+  }
+
   runApp(const MyApp());
 }
 
@@ -48,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // body: screens[currentIndex],
+        // body: screens[currentIndex], 
 
         );
   }
