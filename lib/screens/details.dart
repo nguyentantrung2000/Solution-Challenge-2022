@@ -26,11 +26,6 @@ class _detailState extends State<detail> {
   CollectionReference reports =
       FirebaseFirestore.instance.collection('reports');
 
-  UploadTask? task;
-  File? imageURI;
-  final ImagePicker _picker = ImagePicker();
-  List<XFile> _imageList = [];
-
   String _id = "8vc4u3dIIzS9OSiPMVqz";
 
   void initState() {
@@ -43,13 +38,15 @@ class _detailState extends State<detail> {
   String? optional;
   String? details;
   List<String> imageList = [];
-
+  dynamic _report;
   Future _getDocId() async {
     try {
       var document = await reports.doc(_id).get();
- 
-      print(document.data());
-      
+      setState(() {
+        _report = document.data();
+      });
+      // print(document.data());
+      print(_report['address']);
     } catch (err) {
       print(err);
     }
@@ -59,7 +56,6 @@ class _detailState extends State<detail> {
   Widget build(BuildContext context) {
     TextEditingController _moreDetials = TextEditingController();
     Size size = MediaQuery.of(context).size;
-    print(size.width);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -98,7 +94,7 @@ class _detailState extends State<detail> {
                     SizedBox(
                       height: size.height * 0.03,
                     ),
-                    Text(''),
+                    Text(_report != null ? _report['address'] : ""),
                   ],
                 )
               ],
@@ -127,7 +123,7 @@ class _detailState extends State<detail> {
                     SizedBox(
                       height: size.height * 0.03,
                     ),
-                    Text('Room 8, Floor 5'),
+                    Text(_report != null ? _report['optional'] : ""),
                   ],
                 )
               ],
@@ -155,7 +151,7 @@ class _detailState extends State<detail> {
                     SizedBox(
                       height: size.height * 0.03,
                     ),
-                    Text('Đức Trọng đã bị đánh...'),
+                    Text(_report != null ? _report['details'] : ""),
                   ],
                 )
               ],
@@ -189,23 +185,28 @@ class _detailState extends State<detail> {
             SizedBox(
               height: size.height * 0.03,
             ),
-            _imageList.length == 0
+            _report == null
                 ? Center(
                     child: Text("No images, videos, audios"),
                   )
-                : Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // ignore: prefer_const_constructors
-                      _imageList.length == 0
-                          ? Center(
-                              child: Text("No images, videos, audios"),
-                            )
-                          : Row(children: <Widget>[
-                              for (var i = 0; i < _imageList.length; i++)
-                                Image.file(File(_imageList[i].path), height: 85)
-                            ])
-                    ],
+                // : Row(children: <Widget>[
+                //     for (var i = 0; i < _report['imagesURL'].length; i++)
+                //       Image.network(_report['imagesURL'][i], height: 85)
+                //   ]),
+                : Container(
+                    // padding: EdgeInsets.all(12.0),
+                    // child: GridView.builder(
+                    //   itemCount: _report['imagesURL'].length,
+                    //   gridDelegate:
+                    //       const SliverGridDelegateWithFixedCrossAxisCount(
+                    //           crossAxisCount: 2,
+                    //           crossAxisSpacing: 4.0,
+                    //           mainAxisSpacing: 4.0),
+                    //   itemBuilder: (BuildContext context, int index) {
+                    //     return Image.network(_report['imagesURL'][index],
+                    //         height: 85);
+                    //   },
+                    // )
                   ),
           ]),
         ),
