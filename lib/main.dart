@@ -1,4 +1,4 @@
-import 'package:challenge/screens/landingpage_1.dart';
+import 'package:challenge/screens/landingpages/landingpage_1.dart';
 import 'package:challenge/screens/listview.dart';
 import 'package:challenge/screens/main_page.dart';
 import 'package:challenge/screens/report_form.dart';
