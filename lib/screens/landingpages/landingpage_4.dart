@@ -45,7 +45,7 @@ class _State extends State<landingPage4> {
                 ),
                 Container(
                   child: Image.asset(
-                    'images/image4.png',
+                    'assets/images/image4.png',
                     width: size.width * 0.5,
                     height: size.height * 0.5,
                   ),

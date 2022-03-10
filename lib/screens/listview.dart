@@ -82,7 +82,7 @@ class ListViewPageState extends State<ListViewPage> {
                           child: ElevatedButton(
                             onPressed: doingsomething,
                             style: ElevatedButton.styleFrom(
-                              primary: i['resolve'] == true
+                              primary: i['resolve']
                                   ? Color(0xff219653)
                                   : Color(0xffE0E0E0),
                               minimumSize:
@@ -97,7 +97,7 @@ class ListViewPageState extends State<ListViewPage> {
                                   Text(
                                     i['address'],
                                     style: TextStyle(
-                                        color: i['resolve'] == true
+                                        color: i['resolve'] 
                                             ? Color(0xffFFFFFF)
                                             : Color(0xff000000),
                                         letterSpacing: 0.5),
@@ -108,7 +108,7 @@ class ListViewPageState extends State<ListViewPage> {
                                         Icon(
                                           IconData(0xe22d,
                                               fontFamily: 'MaterialIcons'),
-                                          color: i['resolve'] == true
+                                          color: i['resolve']
                                               ? Color(0xffFFFFFF)
                                               : Color(0xff000000),
                                         ),
@@ -116,7 +116,7 @@ class ListViewPageState extends State<ListViewPage> {
                                           i['num'].toString(),
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
-                                              color: i['resolve'] == true
+                                              color: i['resolve']
                                                   ? Color(0xffFFFFFF)
                                                   : Color(0xff000000)),
                                         ),
