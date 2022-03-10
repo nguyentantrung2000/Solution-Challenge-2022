@@ -13,21 +13,49 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-   static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  List markers = [
+    {
+      "id": "_kGooglePlexMaker",
+      "title": "Google Plex",
+      "lat": "11.766871",
+      "long": "108.801220"
+    },
+    {
+      "id": "_kGooglePlexMaker",
+      "title": "Google Plex",
+      "lat": "11.766871",
+      "long": "108.801220"
+    },
+    {
+      "id": "'xanh ne'",
+      "title": "This is blue",
+      "lat": "11.766877",
+      "long": "108.801200"
+    }
+  ];
+
+  
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: _kGooglePlex,
+  
+        mapType: MapType.terrain,
+        markers: markers.map((s) {
+          return Marker(
+            markerId: MarkerId(s['id']),
+            infoWindow: InfoWindow(title: s['title']),
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            position: (LatLng(double.parse(s['lat']), double.parse(s['long']))),
+            onTap: () {
+            },
+          );
+        }).toSet(),
+        initialCameraPosition: CameraPosition(
+          target: LatLng(11.766873, 108.801208),
+          zoom: 15,
+        ),
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
@@ -42,6 +70,14 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+            bearing: 192.8334901395799,
+            target: LatLng(11.766877, 108.801220),
+            tilt: 59.440717697143555,
+            zoom: 25),
+      ),
+    );
   }
 }
