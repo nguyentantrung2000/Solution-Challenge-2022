@@ -18,10 +18,15 @@ class _MapPageState extends State<MapPage> {
     var position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     var latPosition = await Geolocator.getLastKnownPosition();
-    print(latPosition);
+    print("$position.latitude,$position.longtitude");
     setState(() {
       locationMess = "$position.latitude,$position.longtitude";
     });
+  }
+
+  void determinePosition() async {
+    var position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(position);
   }
 
   Completer<GoogleMapController> _controller = Completer();
@@ -33,6 +38,12 @@ class _MapPageState extends State<MapPage> {
       "long": "108.801220"
     },
   ];
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    determinePosition();
+  }
 
   @override
   Widget build(BuildContext context) {
