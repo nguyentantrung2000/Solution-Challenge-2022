@@ -1,4 +1,4 @@
 library globals;
 
-String language="English";
+String? language="English";
 bool locationPerm=false; 
