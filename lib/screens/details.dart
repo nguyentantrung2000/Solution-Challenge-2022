@@ -189,25 +189,25 @@ class _detailState extends State<detail> {
                 ? Center(
                     child: Text("No images, videos, audios"),
                   )
-                // : Row(children: <Widget>[
-                //     for (var i = 0; i < _report['imagesURL'].length; i++)
-                //       Image.network(_report['imagesURL'][i], height: 85)
-                //   ]),
-                : Container(
-                    // padding: EdgeInsets.all(12.0),
-                    // child: GridView.builder(
-                    //   itemCount: _report['imagesURL'].length,
-                    //   gridDelegate:
-                    //       const SliverGridDelegateWithFixedCrossAxisCount(
-                    //           crossAxisCount: 2,
-                    //           crossAxisSpacing: 4.0,
-                    //           mainAxisSpacing: 4.0),
-                    //   itemBuilder: (BuildContext context, int index) {
-                    //     return Image.network(_report['imagesURL'][index],
-                    //         height: 85);
-                    //   },
-                    // )
-                  ),
+                : Row(children: <Widget>[
+                    for (var i = 0; i < _report['imagesURL'].length; i++)
+                      Image.network(_report['imagesURL'][i], height: 85)
+                  ]),
+                // : Container(
+                //     // padding: EdgeInsets.all(12.0),
+                //     // child: GridView.builder(
+                //     //   itemCount: _report['imagesURL'].length,
+                //     //   gridDelegate:
+                //     //       const SliverGridDelegateWithFixedCrossAxisCount(
+                //     //           crossAxisCount: 2,
+                //     //           crossAxisSpacing: 4.0,
+                //     //           mainAxisSpacing: 4.0),
+                //     //   itemBuilder: (BuildContext context, int index) {
+                //     //     return Image.network(_report['imagesURL'][index],
+                //     //         height: 85);
+                //     //   },
+                //     // )
+                //   ),
           ]),
         ),
       ),

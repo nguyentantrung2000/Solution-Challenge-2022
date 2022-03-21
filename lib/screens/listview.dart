@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:challenge/screens/details.dart';
+import 'package:challenge/screens/report_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
@@ -80,7 +82,11 @@ class ListViewPageState extends State<ListViewPage> {
                             ],
                           ),
                           child: ElevatedButton(
-                            onPressed: doingsomething,
+                            onPressed: (){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => detail()));
+                            },
                             style: ElevatedButton.styleFrom(
                               primary: i['resolve']
                                   ? Color(0xff219653)
@@ -150,7 +156,12 @@ class ListViewPageState extends State<ListViewPage> {
               ),
               width: size.width,
               child: ElevatedButton(
-                onPressed: doingsomething,
+                onPressed: (){
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Report()),
+                );
+                },
                 style: ElevatedButton.styleFrom(
                     minimumSize: Size(size.width, size.height * 0.07),
                     primary: Colors.white,
