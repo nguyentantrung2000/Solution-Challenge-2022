@@ -17,11 +17,15 @@ class _SettingState extends State<Setting> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Setting',style: 
-        TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        )
+        title: 
+        Padding(
+          padding: const EdgeInsets.only(right: 20 ),
+          child: Text('Setting',style: 
+          TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          )
+          ),
         ),
         backgroundColor: Colors.white12,
         elevation: 0,
