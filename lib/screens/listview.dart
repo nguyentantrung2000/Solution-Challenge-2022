@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(ListView());
@@ -24,22 +25,27 @@ class ListViewPageState extends State<ListViewPage> {
       FirebaseFirestore.instance.collection('reports');
 
   List cases = [];
-  void doingsomething() {}
-  Widget build(BuildContext context) {
-    reports.get().then(
-          (value) => {
-          
-            value.docs.forEach(
-              (data) {
-               
-                cases.add(data.data());
-               
-              },
+  getData() async {
+    final CollectionReference document =
+        FirebaseFirestore.instance.collection("reports");
+    await document.get().then((value) async => {
+          value.docs.forEach((element) => {
+                setState(() => {
+                      cases.add(element.data()),
+                    })
+              }),
               
-            ),
-             print(cases.length),
-          },
-        );
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  Widget build(BuildContext context) {
+    reports.get().then((value) => {});
     Size size = MediaQuery.of(context).size;
     print(size);
     return MaterialApp(
@@ -57,7 +63,7 @@ class ListViewPageState extends State<ListViewPage> {
                   // ignore: prefer_const_literals_to_create_immutables
                   children: [
                     Text(
-                      'Total cases: ${}',
+                      'Total cases: ${cases.length}',
                       style: TextStyle(
                         fontSize: 20,
                         letterSpacing: 0.15,
@@ -65,7 +71,7 @@ class ListViewPageState extends State<ListViewPage> {
                       ),
                     ),
                     Text(
-                      'Resolved: ${(cases.where((x) => x['resolve'] == true).toList().length)}',
+                      'Resolved: ${(cases.where((x) => x['resolved'] == true).toList().length)}',
                       style: TextStyle(
                           fontSize: 20,
                           letterSpacing: 0.15,
@@ -100,7 +106,7 @@ class ListViewPageState extends State<ListViewPage> {
                                       builder: (context) => detail()));
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: i['resolve']
+                              primary: i['resolved']
                                   ? Color(0xff219653)
                                   : Color(0xffE0E0E0),
                               minimumSize:
@@ -115,7 +121,7 @@ class ListViewPageState extends State<ListViewPage> {
                                   Text(
                                     i['address'],
                                     style: TextStyle(
-                                        color: i['resolve']
+                                        color: i['resolved']
                                             ? Color(0xffFFFFFF)
                                             : Color(0xff000000),
                                         letterSpacing: 0.5),
@@ -126,15 +132,15 @@ class ListViewPageState extends State<ListViewPage> {
                                         Icon(
                                           IconData(0xe22d,
                                               fontFamily: 'MaterialIcons'),
-                                          color: i['resolve']
+                                          color: i['resolved']
                                               ? Color(0xffFFFFFF)
                                               : Color(0xff000000),
                                         ),
                                         Text(
-                                          i['num'].toString(),
+                                          i['log'].toString(),
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
-                                              color: i['resolve']
+                                              color: i['resolved']
                                                   ? Color(0xffFFFFFF)
                                                   : Color(0xff000000)),
                                         ),
