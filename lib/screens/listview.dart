@@ -4,6 +4,8 @@ import 'package:challenge/screens/details.dart';
 import 'package:challenge/screens/report_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   runApp(ListView());
@@ -18,16 +20,26 @@ class ListViewPage extends StatefulWidget {
 }
 
 class ListViewPageState extends State<ListViewPage> {
-  List cases = [
-    {"address": "180 Cao Thắng, Q.10, TP.HCM", "resolve": false, "num": 10},
-    {"address": "8 Nguyễn Văn Tráng, Q.1, TP.HCM", "resolve": false, "num": 7},
-    {"address": "279 Trần Nhân Tôn, Q.10, TP.HCM", "resolve": true, "num": 5},
-    {"address": "1 Đường số 19,BHHA,Q.Bình Tân...", "resolve": false, "num": 1}
-  ];
+  CollectionReference reports =
+      FirebaseFirestore.instance.collection('reports');
 
+  List cases = [];
   void doingsomething() {}
   Widget build(BuildContext context) {
-
+    reports.get().then(
+          (value) => {
+          
+            value.docs.forEach(
+              (data) {
+               
+                cases.add(data.data());
+               
+              },
+              
+            ),
+             print(cases.length),
+          },
+        );
     Size size = MediaQuery.of(context).size;
     print(size);
     return MaterialApp(
@@ -35,7 +47,6 @@ class ListViewPageState extends State<ListViewPage> {
         body: (Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            
             Container(
               width: size.width,
               margin: EdgeInsets.only(
@@ -46,7 +57,7 @@ class ListViewPageState extends State<ListViewPage> {
                   // ignore: prefer_const_literals_to_create_immutables
                   children: [
                     Text(
-                      'Total cases: ${cases.length}',
+                      'Total cases: ${}',
                       style: TextStyle(
                         fontSize: 20,
                         letterSpacing: 0.15,
@@ -54,7 +65,7 @@ class ListViewPageState extends State<ListViewPage> {
                       ),
                     ),
                     Text(
-                      'Resolved: ${(cases.where((x) => x['resolve'] ==true).toList().length)}',
+                      'Resolved: ${(cases.where((x) => x['resolve'] == true).toList().length)}',
                       style: TextStyle(
                           fontSize: 20,
                           letterSpacing: 0.15,
@@ -63,7 +74,7 @@ class ListViewPageState extends State<ListViewPage> {
                   ]),
             ),
             Container(
-              padding: EdgeInsets.only(bottom: size.height *0.35),
+              padding: EdgeInsets.only(bottom: size.height * 0.35),
               child: Column(
                 children: [
                   for (var i in cases)
@@ -82,10 +93,11 @@ class ListViewPageState extends State<ListViewPage> {
                             ],
                           ),
                           child: ElevatedButton(
-                            onPressed: (){
+                            onPressed: () {
                               Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => detail()));
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => detail()));
                             },
                             style: ElevatedButton.styleFrom(
                               primary: i['resolve']
@@ -103,7 +115,7 @@ class ListViewPageState extends State<ListViewPage> {
                                   Text(
                                     i['address'],
                                     style: TextStyle(
-                                        color: i['resolve'] 
+                                        color: i['resolve']
                                             ? Color(0xffFFFFFF)
                                             : Color(0xff000000),
                                         letterSpacing: 0.5),
@@ -140,11 +152,8 @@ class ListViewPageState extends State<ListViewPage> {
                 ],
               ),
             ),
-      
             Container(
-       
               decoration: BoxDecoration(
-              
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
@@ -156,11 +165,11 @@ class ListViewPageState extends State<ListViewPage> {
               ),
               width: size.width,
               child: ElevatedButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Report()),
-                );
+                    context,
+                    MaterialPageRoute(builder: (context) => const Report()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                     minimumSize: Size(size.width, size.height * 0.07),
