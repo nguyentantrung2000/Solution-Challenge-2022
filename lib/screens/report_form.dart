@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
+import 'package:challenge/screens/listview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -10,6 +11,7 @@ import 'package:challenge/api/firebase_api.dart';
 import 'package:challenge/widget/button_widget.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Report extends StatefulWidget {
   const Report({Key? key}) : super(key: key);
@@ -25,6 +27,8 @@ class _ReportState extends State<Report> {
   UploadTask? task;
   File? imageURI;
   final ImagePicker _picker = ImagePicker();
+  var Latitude;
+  var Longitude;
   List<XFile> _imageList = [];
 
   Future selectFile() async {
@@ -38,7 +42,23 @@ class _ReportState extends State<Report> {
     }
   }
 
-  Future _uploadReport() async {
+  void determinePosition() async {
+    var position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(position);
+    setState(() {
+      Latitude = position.latitude;
+      Longitude = position.longitude;
+    });
+  }
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    determinePosition();
+  }
+
+  Future _uploadReport(BuildContext context) async {
     if (_imageList.length == 0) return;
 
     final _id = DateTime.now().millisecondsSinceEpoch;
@@ -56,21 +76,26 @@ class _ReportState extends State<Report> {
       _imageURL.add(urlDownload);
     }
 
-    reports.add({
-      "address": "180 Cao Thắng, Q.10, TP.HCM",
-      "optional": "Room 8, Floor 5",
-      "imagesURL": _imageURL,
-      "details": "",
-      "X": '10.7746011',
-      "Y": '106.6755312',
-      "time": _id,
-      "id": _id
-    }).then((value) => {
-      print('Create report successflly!!!')
-    })
-    .catchError((onError)=>{
-      print('Create report failed!!!')
-    });
+    reports
+        .add({
+          "address": "180 Cao Thắng, Q.10, TP.HCM",
+          "optional": "Room 8, Floor 5",
+          "imagesURL": _imageURL,
+          "details": "",
+          "lat": Latitude,
+          "long": Longitude,
+          "time": _id,
+          "id": _id,
+          "logs": [],
+          "resolve": false
+        })
+        .then((value) => {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => ListViewPage()),
+              // )
+            })
+        .catchError((onError) => {print('Create report failed!!!')});
   }
 
   @override
@@ -263,7 +288,7 @@ class _ReportState extends State<Report> {
                     padding: EdgeInsets.all(8.0),
                   ),
                   onPressed: () {
-                    _uploadReport();
+                    _uploadReport(context);
                   },
                   child: Align(
                     alignment: Alignment.center,

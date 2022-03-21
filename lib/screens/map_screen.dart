@@ -27,6 +27,7 @@ class _MapPageState extends State<MapPage> {
   void determinePosition() async {
     var position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     print(position);
+  
   }
 
   Completer<GoogleMapController> _controller = Completer();
