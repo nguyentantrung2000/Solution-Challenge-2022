@@ -1,9 +1,11 @@
 import 'dart:async';
-
+import 'package:challenge/screens/details.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -12,10 +14,9 @@ class MapPage extends StatefulWidget {
   State<MapPage> createState() => _MapPageState();
 }
 
-
 class _MapPageState extends State<MapPage> {
   var locationMess = "";
-   var Latitude;
+  var Latitude;
   var Longitude;
   void getCurrentLocation() async {
     var position = await Geolocator.getCurrentPosition(
@@ -28,26 +29,39 @@ class _MapPageState extends State<MapPage> {
   }
 
   void determinePosition() async {
-    var position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-        setState(() {
+    var position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    setState(() {
       Latitude = position.latitude;
       Longitude = position.longitude;
     });
   }
 
   Completer<GoogleMapController> _controller = Completer();
-  List markers = [
-    {
-      "id": "_kGooglePlexMaker",
-      "title": "hahaha",
-      "lat": "11.766871",
-      "long": "108.801220"
-    },
-  ];
+  List markers = [];
+
+  getData() async {
+    final CollectionReference document =
+        FirebaseFirestore.instance.collection("reports");
+    await document.get().then((value) async => {
+          value.docs.forEach((element) => {
+                setState(() => {
+                      markers.add({
+                        'id': element.id,
+                        'title': element['address'],
+                        'lat': element['lat'],
+                        'long': element['long']
+                      }),
+                    })
+              }),
+              print(markers)
+        });
+  }
 
   void initState() {
     // TODO: implement initState
     super.initState();
+    getData();
     determinePosition();
   }
 
@@ -61,15 +75,18 @@ class _MapPageState extends State<MapPage> {
             markerId: MarkerId(s['id']),
             infoWindow: InfoWindow(title: s['title']),
             icon:
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-            position: (LatLng(Latitude,Longitude)),
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+            position: (LatLng(Latitude, Longitude)),
             onTap: () {
-              print(locationMess);
+                  Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => detail(s['id'])));
             },
           );
         }).toSet(),
         initialCameraPosition: CameraPosition(
-          target: LatLng(Latitude,Longitude),
+          target: LatLng(Latitude, Longitude),
           zoom: 15,
         ),
         onMapCreated: (GoogleMapController controller) {

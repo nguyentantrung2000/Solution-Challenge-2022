@@ -21,8 +21,6 @@ class ListViewPage extends StatefulWidget {
 }
 
 class ListViewPageState extends State<ListViewPage> {
-  CollectionReference reports =
-      FirebaseFirestore.instance.collection('reports');
 
   List cases = [];
   getData() async {
@@ -31,10 +29,13 @@ class ListViewPageState extends State<ListViewPage> {
     await document.get().then((value) async => {
           value.docs.forEach((element) => {
                 setState(() => {
-                      cases.add(element.data()),
+                   
+                      cases.add({'documentID':element.id,'data':element.data()}),
+                    
+                      
                     })
               }),
-              
+             
         });
   }
 
@@ -45,7 +46,7 @@ class ListViewPageState extends State<ListViewPage> {
   }
 
   Widget build(BuildContext context) {
-    reports.get().then((value) => {});
+   
     Size size = MediaQuery.of(context).size;
     print(size);
     return MaterialApp(
@@ -71,7 +72,7 @@ class ListViewPageState extends State<ListViewPage> {
                       ),
                     ),
                     Text(
-                      'Resolved: ${(cases.where((x) => x['resolved'] == true).toList().length)}',
+                      'Resolved: ${(cases.where((x) => x['data']['resolved']== true).toList().length)}',
                       style: TextStyle(
                           fontSize: 20,
                           letterSpacing: 0.15,
@@ -100,13 +101,13 @@ class ListViewPageState extends State<ListViewPage> {
                           ),
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
+                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => detail()));
+                                      builder: (context) => detail(i['documentID'])));
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: i['resolved']
+                              primary: i['data']['resolved']
                                   ? Color(0xff219653)
                                   : Color(0xffE0E0E0),
                               minimumSize:
@@ -119,9 +120,9 @@ class ListViewPageState extends State<ListViewPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    i['address'],
+                                    i['data']['address'],
                                     style: TextStyle(
-                                        color: i['resolved']
+                                        color: i['data']['resolved']
                                             ? Color(0xffFFFFFF)
                                             : Color(0xff000000),
                                         letterSpacing: 0.5),
@@ -132,15 +133,15 @@ class ListViewPageState extends State<ListViewPage> {
                                         Icon(
                                           IconData(0xe22d,
                                               fontFamily: 'MaterialIcons'),
-                                          color: i['resolved']
+                                          color: i['data']['resolved']
                                               ? Color(0xffFFFFFF)
                                               : Color(0xff000000),
                                         ),
                                         Text(
-                                          i['log'].toString(),
+                                          i['data']['log'].toString(),
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
-                                              color: i['resolved']
+                                              color: i['data']['resolved']
                                                   ? Color(0xffFFFFFF)
                                                   : Color(0xff000000)),
                                         ),

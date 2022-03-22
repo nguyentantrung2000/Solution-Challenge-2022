@@ -16,7 +16,10 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 
 class detail extends StatefulWidget {
-  detail({Key? key}) : super(key: key);
+   String _idDoc;
+  detail(this._idDoc);
+
+
 
   @override
   State<detail> createState() => _detailState();
@@ -26,7 +29,7 @@ class _detailState extends State<detail> {
   CollectionReference reports =
       FirebaseFirestore.instance.collection('reports');
 
-  String _id = "8vc4u3dIIzS9OSiPMVqz";
+
 
   void initState() {
     // TODO: implement initState
@@ -41,7 +44,7 @@ class _detailState extends State<detail> {
   dynamic _report;
   Future _getDocId() async {
     try {
-      var document = await reports.doc(_id).get();
+      var document = await reports.doc(widget._idDoc).get();
       setState(() {
         _report = document.data();
       });
