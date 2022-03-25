@@ -97,7 +97,6 @@ class _ReportState extends State<Report> {
               //   context,
               //   MaterialPageRoute(builder: (context) => ListViewPage()),
               // )
-          
             })
         .catchError((onError) => {print('Create report failed!!!')});
   }
@@ -230,26 +229,62 @@ class _ReportState extends State<Report> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // ignore: prefer_const_constructors
-                Container(
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size(85, 85),
-                        primary: Color(0xffE5E5E5),
-                        onPrimary: Color.fromARGB(255, 0, 0, 0),
-                      ),
-                      onPressed: () => {selectFile()},
-                      child: Icon(Icons.add)),
-                ),
-                Row(
-                  children: [
-                    _imageList.length == 0
-                        ? Text("")
-                        : Row(children: <Widget>[
+                _imageList.length == 0
+                    ? Container(
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              fixedSize: Size(85, 85),
+                              primary: Color(0xffE5E5E5),
+                              onPrimary: Color.fromARGB(255, 0, 0, 0),
+                            ),
+                            onPressed: () => {selectFile()},
+                            child: Icon(Icons.add)),
+                      )
+                    // : Row(
+                    //     children: [
+                    //       _imageList.length == 0
+                    //           ? Text("")
+                    //           : Row(children: <Widget>[
+                    //               for (var i = 0; i < _imageList.length; i++)
+                    //                 Image.file(File(_imageList[i].path),
+                    //                     height: 85)
+                    //             ])
+                    //     ],
+                    //   )
+                    : Container(
+                        child: GridView.count(
+                          crossAxisCount: 3,
+                          addRepaintBoundaries: true,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.all(15),
+                          key: UniqueKey(),
+                          children: [
                             for (var i = 0; i < _imageList.length; i++)
-                              Image.file(File(_imageList[i].path), height: 85)
-                          ])
-                  ],
-                )
+                              GestureDetector(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: Image.file(
+                                    File(_imageList[i].path),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                onTap: () {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (_) {
+                                  //       return;
+                                  //     },
+                                  //     fullscreenDialog: true,
+                                  //   ),
+                                  // );
+                                },
+                              ),
+                          ],
+                        ),
+                      ),
               ],
             ),
             SizedBox(

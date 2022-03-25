@@ -21,7 +21,6 @@ class ListViewPage extends StatefulWidget {
 }
 
 class ListViewPageState extends State<ListViewPage> {
-
   List cases = [];
   getData() async {
     final CollectionReference document =
@@ -29,13 +28,10 @@ class ListViewPageState extends State<ListViewPage> {
     await document.get().then((value) async => {
           value.docs.forEach((element) => {
                 setState(() => {
-                   
-                      cases.add({'documentID':element.id,'data':element.data()}),
-                    
-                      
+                      cases.add(
+                          {'documentID': element.id, 'data': element.data()}),
                     })
               }),
-             
         });
   }
 
@@ -46,9 +42,8 @@ class ListViewPageState extends State<ListViewPage> {
   }
 
   Widget build(BuildContext context) {
-   
     Size size = MediaQuery.of(context).size;
-  
+
     return MaterialApp(
       home: Scaffold(
         body: (Column(
@@ -72,7 +67,7 @@ class ListViewPageState extends State<ListViewPage> {
                       ),
                     ),
                     Text(
-                      'Resolved: ${(cases.where((x) => x['data']['resolved']== true).toList().length)}',
+                      'Resolved: ${(cases.where((x) => x['data']['resolved'] == true).toList().length)}',
                       style: TextStyle(
                           fontSize: 20,
                           letterSpacing: 0.15,
@@ -101,10 +96,11 @@ class ListViewPageState extends State<ListViewPage> {
                           ),
                           child: ElevatedButton(
                             onPressed: () {
-                                 Navigator.push(
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => detail(i['documentID'])));
+                                      builder: (context) =>
+                                          detail(i['documentID'])));
                             },
                             style: ElevatedButton.styleFrom(
                               primary: i['data']['resolved']
