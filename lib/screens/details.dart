@@ -16,10 +16,8 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 
 class detail extends StatefulWidget {
-   String _idDoc;
+  String _idDoc;
   detail(this._idDoc);
-
-
 
   @override
   State<detail> createState() => _detailState();
@@ -28,8 +26,6 @@ class detail extends StatefulWidget {
 class _detailState extends State<detail> {
   CollectionReference reports =
       FirebaseFirestore.instance.collection('reports');
-
-
 
   void initState() {
     // TODO: implement initState
@@ -65,7 +61,7 @@ class _detailState extends State<detail> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Details child Abusing Report',
+        title: const Text('Details',
             style: TextStyle(
                 color: Color.fromARGB(255, 255, 255, 255), fontSize: 24)),
         backgroundColor: Color(0xff219653),
@@ -192,25 +188,59 @@ class _detailState extends State<detail> {
                 ? Center(
                     child: Text("No images, videos, audios"),
                   )
-                : Row(children: <Widget>[
-                    for (var i = 0; i < _report['imagesURL'].length; i++)
-                      Image.network(_report['imagesURL'][i], height: 85)
-                  ]),
-                // : Container(
-                //     // padding: EdgeInsets.all(12.0),
-                //     // child: GridView.builder(
-                //     //   itemCount: _report['imagesURL'].length,
-                //     //   gridDelegate:
-                //     //       const SliverGridDelegateWithFixedCrossAxisCount(
-                //     //           crossAxisCount: 2,
-                //     //           crossAxisSpacing: 4.0,
-                //     //           mainAxisSpacing: 4.0),
-                //     //   itemBuilder: (BuildContext context, int index) {
-                //     //     return Image.network(_report['imagesURL'][index],
-                //     //         height: 85);
-                //     //   },
-                //     // )
-                //   ),
+                // : Row(children: <Widget>[
+                //     for (var i = 0; i < _report['imagesURL'].length; i++)
+                //       Image.network(_report['imagesURL'][i], height: 85)
+                //   ]),
+                : Container(
+                    child: GridView.count(
+                      crossAxisCount: 3,
+                      addRepaintBoundaries: true,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(15),
+                      key: UniqueKey(),
+                      children: [
+                        for (var i = 0; i < _report['imagesURL'].length; i++)
+                          GestureDetector(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.network(
+                                _report['imagesURL'][i],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            onTap: () {
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (_) {
+                              //       return;
+                              //     },
+                              //     fullscreenDialog: true,
+                              //   ),
+                              // );
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+            // : Container(
+            //     // padding: EdgeInsets.all(12.0),
+            //     // child: GridView.builder(
+            //     //   itemCount: _report['imagesURL'].length,
+            //     //   gridDelegate:
+            //     //       const SliverGridDelegateWithFixedCrossAxisCount(
+            //     //           crossAxisCount: 2,
+            //     //           crossAxisSpacing: 4.0,
+            //     //           mainAxisSpacing: 4.0),
+            //     //   itemBuilder: (BuildContext context, int index) {
+            //     //     return Image.network(_report['imagesURL'][index],
+            //     //         height: 85);
+            //     //   },
+            //     // )
+            //   ),
           ]),
         ),
       ),

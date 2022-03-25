@@ -36,13 +36,13 @@ class _MapPageState extends State<MapPage> {
       Latitude = position.latitude;
       Longitude = position.longitude;
     });
-            markers.add({
-            'id': "my location",
-            'title': "You are here",
-            'lat': Latitude,
-            'long': Longitude,
-            'myLocation': true,
-            });
+    markers.add({
+      'id': "my location",
+      'title': "You are here",
+      'lat': Latitude,
+      'long': Longitude,
+      'myLocation': true,
+    });
   }
 
   Completer<GoogleMapController> _controller = Completer();
@@ -63,7 +63,6 @@ class _MapPageState extends State<MapPage> {
                       }),
                     })
               }),
-  
           print(markers)
         });
   }
@@ -83,7 +82,7 @@ class _MapPageState extends State<MapPage> {
           : GoogleMap(
               mapType: MapType.terrain,
               markers: markers.map((s) {
-                if (s['myLocation']==true) {
+                if (s['myLocation'] == true) {
                   return Marker(
                     markerId: MarkerId(s['id']),
                     infoWindow: InfoWindow(title: s['title']),
