@@ -1,16 +1,10 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
-import 'package:challenge/screens/listview.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:challenge/api/firebase_api.dart';
-import 'package:challenge/widget/button_widget.dart';
-import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -30,15 +24,16 @@ class _ReportState extends State<Report> {
   final ImagePicker _picker = ImagePicker();
   var Latitude = 0.0;
   var Longitude = 0.0;
-  List<XFile> _imageList = [];
+  List _imageList = [];
   TextEditingController _moreDetails = TextEditingController();
   TextEditingController _address = TextEditingController();
   TextEditingController _optional = TextEditingController();
   Future selectFile() async {
     try {
-      final List<XFile>? images = await _picker.pickMultiImage();
+      final XFile? images =
+          await _picker.pickImage(source: ImageSource.gallery);
       setState(() {
-        _imageList = images!;
+        _imageList.add(images!);
       });
     } catch (e) {
       print(e);
@@ -104,7 +99,7 @@ class _ReportState extends State<Report> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    print(size.width);
+    print(_imageList.length);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -225,67 +220,62 @@ class _ReportState extends State<Report> {
             SizedBox(
               height: size.height * 0.03,
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ignore: prefer_const_constructors
-                _imageList.length == 0
-                    ? Container(
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              fixedSize: Size(85, 85),
-                              primary: Color(0xffE5E5E5),
-                              onPrimary: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            onPressed: () => {selectFile()},
-                            child: Icon(Icons.add)),
-                      )
-                    // : Row(
-                    //     children: [
-                    //       _imageList.length == 0
-                    //           ? Text("")
-                    //           : Row(children: <Widget>[
-                    //               for (var i = 0; i < _imageList.length; i++)
-                    //                 Image.file(File(_imageList[i].path),
-                    //                     height: 85)
-                    //             ])
-                    //     ],
-                    //   )
-                    : Container(
-                        child: GridView.count(
-                          crossAxisCount: 3,
-                          addRepaintBoundaries: true,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 5,
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.all(15),
-                          key: UniqueKey(),
-                          children: [
-                            for (var i = 0; i < _imageList.length; i++)
-                              GestureDetector(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  child: Image.file(
-                                    File(_imageList[i].path),
-                                    fit: BoxFit.cover,
-                                  ),
+            // Row(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     // ignore: prefer_const_constructors
+            //     _imageList.length == 0
+            //         ? Container(
+            //             child: ElevatedButton(
+            //                 style: ElevatedButton.styleFrom(
+            //                   fixedSize: Size(85, 85),
+            //                   primary: Color(0xffE5E5E5),
+            //                   onPrimary: Color.fromARGB(255, 0, 0, 0),
+            //                 ),
+            //                 onPressed: () => {selectFile()},
+            //                 child: Icon(Icons.add)),
+            //           )
+            //         : Row(
+            //             children: [
+            //               _imageList.length == 0
+            //                   ? Text("")
+            //                   : Row(children: <Widget>[
+            //                       for (var i = 0; i < _imageList.length; i++)
+            //                         Image.file(File(_imageList[i].path),
+            //                             height: 85)
+            //                     ])
+            //             ],
+            //           )
+            
+            LimitedBox(
+              maxHeight: 200,
+              child: GridView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: _imageList.length + 1,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 4),
+                  itemBuilder: (context, index) {
+                    return index == _imageList.length
+                        ? Container(
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  fixedSize: Size(85, 85),
+                                  primary: Color(0xffE5E5E5),
+                                  onPrimary: Color.fromARGB(255, 0, 0, 0),
                                 ),
-                                onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (_) {
-                                  //       return;
-                                  //     },
-                                  //     fullscreenDialog: true,
-                                  //   ),
-                                  // );
-                                },
-                              ),
-                          ],
-                        ),
-                      ),
-              ],
+                                onPressed: () => {selectFile()},
+                                child: Icon(Icons.add)),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Image.file(
+                              File(_imageList[index].path),
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                  }),
             ),
             SizedBox(
               height: size.height * 0.03,
