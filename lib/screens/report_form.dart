@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
 import 'package:challenge/screens/listview.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -27,10 +28,12 @@ class _ReportState extends State<Report> {
   UploadTask? task;
   File? imageURI;
   final ImagePicker _picker = ImagePicker();
-  var Latitude;
-  var Longitude;
+  var Latitude = 0.0;
+  var Longitude = 0.0;
   List<XFile> _imageList = [];
-
+  TextEditingController _moreDetails = TextEditingController();
+  TextEditingController _address = TextEditingController();
+  TextEditingController _optional = TextEditingController();
   Future selectFile() async {
     try {
       final List<XFile>? images = await _picker.pickMultiImage();
@@ -45,7 +48,7 @@ class _ReportState extends State<Report> {
   void determinePosition() async {
     var position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    print(position);
+
     setState(() {
       Latitude = position.latitude;
       Longitude = position.longitude;
@@ -75,32 +78,32 @@ class _ReportState extends State<Report> {
       final urlDownload = await snapshot.ref.getDownloadURL();
       _imageURL.add(urlDownload);
     }
-
+    Navigator.of(context).pop();
     reports
         .add({
-          "address": "180 Cao Thắng, Q.10, TP.HCM",
-          "optional": "Room 8, Floor 5",
+          "address": _address.text.trim(),
+          "optional": _optional.text.trim(),
           "imagesURL": _imageURL,
-          "details": "",
+          "details": _moreDetails.text.trim(),
           "lat": Latitude,
           "long": Longitude,
           "time": _id,
           "id": _id,
           "logs": [],
-          "resolve": false
+          "resolved": false
         })
         .then((value) => {
               // Navigator.push(
               //   context,
               //   MaterialPageRoute(builder: (context) => ListViewPage()),
               // )
+          
             })
         .catchError((onError) => {print('Create report failed!!!')});
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _moreDetials = TextEditingController();
     Size size = MediaQuery.of(context).size;
     print(size.width);
     return Scaffold(
@@ -142,7 +145,16 @@ class _ReportState extends State<Report> {
                     SizedBox(
                       height: size.height * 0.03,
                     ),
-                    Text('180 Cao Thắng, Q.10, TP.HCM'),
+                    Container(
+                      width: size.width * 0.6,
+                      child: TextFormField(
+                        controller: _address,
+                        decoration: InputDecoration(
+                          border: UnderlineInputBorder(),
+                          hintText: "180 Cao Thắng, Q.10, TP.HCM",
+                        ),
+                      ),
+                    ),
                   ],
                 )
               ],
@@ -171,7 +183,16 @@ class _ReportState extends State<Report> {
                     SizedBox(
                       height: size.height * 0.03,
                     ),
-                    Text('Room 8, Floor 5'),
+                    Container(
+                      width: size.width * 0.6,
+                      child: TextFormField(
+                        controller: _optional,
+                        decoration: InputDecoration(
+                          border: UnderlineInputBorder(),
+                          hintText: "Room 8 floor 5",
+                        ),
+                      ),
+                    ),
                   ],
                 )
               ],
@@ -259,7 +280,7 @@ class _ReportState extends State<Report> {
               height: size.height * 0.03,
             ),
             TextFormField(
-              controller: _moreDetials,
+              controller: _moreDetails,
               keyboardType: TextInputType.multiline,
               maxLines: null,
               decoration: const InputDecoration(
@@ -288,7 +309,12 @@ class _ReportState extends State<Report> {
                     padding: EdgeInsets.all(8.0),
                   ),
                   onPressed: () {
-                    _uploadReport(context);
+                    if (_address.text.trim() == "" ||
+                        _moreDetails.text.trim() == "") {
+                      return;
+                    } else {
+                      _uploadReport(context);
+                    }
                   },
                   child: Align(
                     alignment: Alignment.center,

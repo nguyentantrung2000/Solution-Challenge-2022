@@ -48,7 +48,7 @@ class ListViewPageState extends State<ListViewPage> {
   Widget build(BuildContext context) {
    
     Size size = MediaQuery.of(context).size;
-    print(size);
+  
     return MaterialApp(
       home: Scaffold(
         body: (Column(
@@ -138,7 +138,7 @@ class ListViewPageState extends State<ListViewPage> {
                                               : Color(0xff000000),
                                         ),
                                         Text(
-                                          i['data']['log'].toString(),
+                                          i['data']['logs'].length.toString(),
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
                                               color: i['data']['resolved']

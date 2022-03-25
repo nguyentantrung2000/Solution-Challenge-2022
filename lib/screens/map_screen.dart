@@ -16,8 +16,8 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   var locationMess = "";
-  var Latitude;
-  var Longitude;
+  var Latitude = 10.7535146;
+  var Longitude = 106.630329;
   void getCurrentLocation() async {
     var position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -54,15 +54,15 @@ class _MapPageState extends State<MapPage> {
                       }),
                     })
               }),
-              print(markers)
+          print(markers)
         });
   }
 
   void initState() {
     // TODO: implement initState
     super.initState();
-    getData();
     determinePosition();
+    getData();
   }
 
   @override
@@ -76,12 +76,10 @@ class _MapPageState extends State<MapPage> {
             infoWindow: InfoWindow(title: s['title']),
             icon:
                 BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-            position: (LatLng(Latitude, Longitude)),
+            position: (LatLng(s['lat'], s['long'])),
             onTap: () {
-                  Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => detail(s['id'])));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => detail(s['id'])));
             },
           );
         }).toSet(),
