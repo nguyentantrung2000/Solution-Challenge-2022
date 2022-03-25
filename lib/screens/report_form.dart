@@ -7,6 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:challenge/api/firebase_api.dart';
 import 'package:path/path.dart';
 import 'package:geolocator/geolocator.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 class Report extends StatefulWidget {
   const Report({Key? key}) : super(key: key);
@@ -40,20 +42,29 @@ class _ReportState extends State<Report> {
     }
   }
 
+  String _myAddress = '...';
   void determinePosition() async {
-    var position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    setState(() {
-      Latitude = position.latitude;
-      Longitude = position.longitude;
-    });
+    try {
+      var position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      setState(() {
+        Latitude = position.latitude;
+        Longitude = position.longitude;
+      });
+      String myUrl =
+          'https://api.opencagedata.com/geocode/v1/json?key=8cdaef3a4f7041548629225833ddd204&q=$Latitude,$Longitude';
+      var req = await http.get(Uri.parse(myUrl));
+      var response = convert.jsonDecode(req.body);
+      setState(() {
+        _myAddress = response['results'][0]['formatted'];
+      });
+    } catch (error) {}
   }
 
   void initState() {
     // TODO: implement initState
-    super.initState();
     determinePosition();
+    super.initState();
   }
 
   Future _uploadReport(BuildContext context) async {
@@ -76,7 +87,7 @@ class _ReportState extends State<Report> {
     Navigator.of(context).pop();
     reports
         .add({
-          "address": _address.text.trim(),
+          "address": _myAddress,
           "optional": _optional.text.trim(),
           "imagesURL": _imageURL,
           "details": _moreDetails.text.trim(),
@@ -113,244 +124,244 @@ class _ReportState extends State<Report> {
         bottomOpacity: 0.0,
         elevation: 0.0,
       ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(33),
-          child: Column(children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ignore: prefer_const_constructors
-                Icon(
-                  Icons.my_location,
-                  color: Colors.black,
-                  size: 24.0,
-                  semanticLabel: 'Text to announce in accessibility modes',
-                ),
-                Container(
-                  child: const Padding(padding: EdgeInsets.only(left: 10)),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 2.2),
-                    Text("Address", style: TextStyle(fontSize: 16)),
-                    SizedBox(
-                      height: size.height * 0.03,
-                    ),
-                    Container(
-                      width: size.width * 0.6,
-                      child: TextFormField(
-                        controller: _address,
-                        decoration: InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: "180 Cao Thắng, Q.10, TP.HCM",
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ignore: prefer_const_constructors
-                Icon(
-                  Icons.my_location,
-                  color: Colors.black,
-                  size: 24.0,
-                ),
-                Container(
-                  child: const Padding(padding: EdgeInsets.only(left: 10)),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 2.2),
-                    Text("Room, floor,...(Optional)",
-                        style: TextStyle(fontSize: 16)),
-                    SizedBox(
-                      height: size.height * 0.03,
-                    ),
-                    Container(
-                      width: size.width * 0.6,
-                      child: TextFormField(
-                        controller: _optional,
-                        decoration: InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: "Room 8 floor 5",
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ignore: prefer_const_constructors
-                Icon(
-                  Icons.description,
-                  color: Colors.black,
-                  size: 24.0,
-                ),
-                Container(
-                  child: const Padding(padding: EdgeInsets.only(left: 10)),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  // ignore: prefer_const_literals_to_create_immutables
-                  children: [
-                    SizedBox(height: 2.2),
-                    Text("Envidences (Videos, photos, audios)",
-                        style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              ],
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            // Row(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: [
-            //     // ignore: prefer_const_constructors
-            //     _imageList.length == 0
-            //         ? Container(
-            //             child: ElevatedButton(
-            //                 style: ElevatedButton.styleFrom(
-            //                   fixedSize: Size(85, 85),
-            //                   primary: Color(0xffE5E5E5),
-            //                   onPrimary: Color.fromARGB(255, 0, 0, 0),
-            //                 ),
-            //                 onPressed: () => {selectFile()},
-            //                 child: Icon(Icons.add)),
-            //           )
-            //         : Row(
-            //             children: [
-            //               _imageList.length == 0
-            //                   ? Text("")
-            //                   : Row(children: <Widget>[
-            //                       for (var i = 0; i < _imageList.length; i++)
-            //                         Image.file(File(_imageList[i].path),
-            //                             height: 85)
-            //                     ])
-            //             ],
-            //           )
-            
-            LimitedBox(
-              maxHeight: 200,
-              child: GridView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: _imageList.length + 1,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 4),
-                  itemBuilder: (context, index) {
-                    return index == _imageList.length
-                        ? Container(
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(85, 85),
-                                  primary: Color(0xffE5E5E5),
-                                  onPrimary: Color.fromARGB(255, 0, 0, 0),
-                                ),
-                                onPressed: () => {selectFile()},
-                                child: Icon(Icons.add)),
-                          )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: Image.file(
-                              File(_imageList[index].path),
-                              fit: BoxFit.cover,
-                            ),
-                          );
-                  }),
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ignore: prefer_const_constructors
-                Icon(
-                  Icons.edit,
-                  color: Colors.black,
-                  size: 24.0,
-                ),
-                Container(
-                  child: const Padding(padding: EdgeInsets.only(left: 10)),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    SizedBox(height: 2.2),
-                    Text("More details", style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              ],
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            TextFormField(
-              controller: _moreDetails,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              decoration: const InputDecoration(
-                  // ignore: unnecessary_const
-                  contentPadding: const EdgeInsets.symmetric(
-                      vertical: 60.0, horizontal: 5.0),
-                  border: OutlineInputBorder()),
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            Container(
-                child: Text(
-                    'BY SUBMITTING THE REPORT, I HEREBY CONFIRM THAT THE ABOVE INFORMATION IS TRUE AND CORRECT',
-                    style: TextStyle(fontWeight: FontWeight.bold))),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            Container(
-              // width: 340.0,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Color(0xff219653),
-                    onPrimary: Colors.white,
-                    elevation: 0,
-                    padding: EdgeInsets.all(8.0),
-                  ),
-                  onPressed: () {
-                    if (_address.text.trim() == "" ||
-                        _moreDetails.text.trim() == "") {
-                      return;
-                    } else {
-                      _uploadReport(context);
-                    }
-                  },
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text("REPORT",
-                        style: TextStyle(fontSize: 20.0),
-                        textAlign: TextAlign.center),
-                  )),
+      body: Latitude == 0
+          ? Center(
+              child: Text('Loading...'),
             )
-          ]),
-        ),
-      ),
+          : SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.all(33),
+                child: Column(children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // ignore: prefer_const_constructors
+                      Icon(
+                        Icons.my_location,
+                        color: Colors.black,
+                        size: 24.0,
+                        semanticLabel:
+                            'Text to announce in accessibility modes',
+                      ),
+                      Container(
+                        child:
+                            const Padding(padding: EdgeInsets.only(left: 10)),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 2.2),
+                          Text("Address", style: TextStyle(fontSize: 16)),
+                          SizedBox(
+                            height: size.height * 0.03,
+                          ),
+                          Container(
+                            child: Text(_myAddress),
+                            // child: TextFormField(
+                            //   controller: _address,
+                            //   decoration: InputDecoration(
+                            //     border: UnderlineInputBorder(),
+                            //     hintText: _myAddress,
+                            //   ),
+                            // ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // ignore: prefer_const_constructors
+                      Icon(
+                        Icons.my_location,
+                        color: Colors.black,
+                        size: 24.0,
+                      ),
+                      Container(
+                        child:
+                            const Padding(padding: EdgeInsets.only(left: 10)),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 2.2),
+                          Text("Room, floor,...(Optional)",
+                              style: TextStyle(fontSize: 16)),
+                          SizedBox(
+                            height: size.height * 0.03,
+                          ),
+                          Container(
+                            width: size.width * 0.6,
+                            child: TextFormField(
+                              controller: _optional,
+                              decoration: InputDecoration(
+                                border: UnderlineInputBorder(),
+                                hintText: "...",
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // ignore: prefer_const_constructors
+                      Icon(
+                        Icons.description,
+                        color: Colors.black,
+                        size: 24.0,
+                      ),
+                      Container(
+                        child:
+                            const Padding(padding: EdgeInsets.only(left: 10)),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          SizedBox(height: 2.2),
+                          Text("Envidences (Videos, photos, audios)",
+                              style: TextStyle(fontSize: 16)),
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  _imageList.length == 0
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    fixedSize: Size(85, 85),
+                                    primary: Color(0xffE5E5E5),
+                                    onPrimary: Color.fromARGB(255, 0, 0, 0),
+                                  ),
+                                  onPressed: () => {selectFile()},
+                                  child: Icon(Icons.add)),
+                            )
+                          ],
+                        )
+                      : LimitedBox(
+                          maxHeight: 200,
+                          child: GridView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: _imageList.length + 1,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: 8,
+                                      mainAxisSpacing: 4),
+                              itemBuilder: (context, index) {
+                                return index == _imageList.length
+                                    ? Container(
+                                        child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              fixedSize: Size(85, 85),
+                                              primary: Color(0xffE5E5E5),
+                                              onPrimary:
+                                                  Color.fromARGB(255, 0, 0, 0),
+                                            ),
+                                            onPressed: () => {selectFile()},
+                                            child: Icon(Icons.add)),
+                                      )
+                                    : ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        child: Image.file(
+                                          File(_imageList[index].path),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      );
+                              }),
+                        ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // ignore: prefer_const_constructors
+                      Icon(
+                        Icons.edit,
+                        color: Colors.black,
+                        size: 24.0,
+                      ),
+                      Container(
+                        child:
+                            const Padding(padding: EdgeInsets.only(left: 10)),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          SizedBox(height: 2.2),
+                          Text("More details", style: TextStyle(fontSize: 16)),
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  TextFormField(
+                    controller: _moreDetails,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    decoration: const InputDecoration(
+                        // ignore: unnecessary_const
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 60.0, horizontal: 5.0),
+                        border: OutlineInputBorder()),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  Container(
+                      child: Text(
+                          'BY SUBMITTING THE REPORT, I HEREBY CONFIRM THAT THE ABOVE INFORMATION IS TRUE AND CORRECT',
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  Container(
+                    // width: 340.0,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xff219653),
+                          onPrimary: Colors.white,
+                          elevation: 0,
+                          padding: EdgeInsets.all(8.0),
+                        ),
+                        onPressed: () {
+                          if (_moreDetails.text.trim() == "") {
+                            return;
+                          } else {
+                            _uploadReport(context);
+                          }
+                        },
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text("REPORT",
+                              style: TextStyle(fontSize: 20.0),
+                              textAlign: TextAlign.center),
+                        )),
+                  )
+                ]),
+              ),
+            ),
     );
   }
 }
