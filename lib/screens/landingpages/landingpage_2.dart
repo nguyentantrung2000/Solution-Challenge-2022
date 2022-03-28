@@ -14,6 +14,7 @@ class _State extends State<landingPage2> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Column(
           children: [

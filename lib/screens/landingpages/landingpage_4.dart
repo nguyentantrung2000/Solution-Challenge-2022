@@ -13,6 +13,7 @@ class _State extends State<landingPage4> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Column(
           children: [
@@ -64,7 +65,7 @@ class _State extends State<landingPage4> {
                           ),
                         ),
                         onPressed: () => {
-                            Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => MainPage(),

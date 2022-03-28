@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:challenge/screens/details.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +35,12 @@ Future<void> main() async {
   } catch (e) {
     print(e);
   }
-
+  Permission.location.isDenied.then((isDenied) {
+    if (isDenied) {
+      Permission.location.request();
+    }
+  });
+  SystemChrome.setEnabledSystemUIOverlays([]);
   runApp(const MyApp());
 }
 
@@ -48,8 +55,10 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        debugShowCheckedModeBanner: false,
+        debugShowMaterialGrid: false,
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-        home: landingPage());
+        home: const landingPage());
   }
 }
 
@@ -66,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // body: screens[currentIndex], 
+        // body: screens[currentIndex],
 
         );
   }

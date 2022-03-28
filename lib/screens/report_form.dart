@@ -133,80 +133,67 @@ class _ReportState extends State<Report> {
               child: Padding(
                 padding: const EdgeInsets.all(33),
                 child: Column(children: [
-                  Row(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // ignore: prefer_const_constructors
-                      Icon(
-                        Icons.my_location,
-                        color: Colors.black,
-                        size: 24.0,
-                        semanticLabel:
-                            'Text to announce in accessibility modes',
-                      ),
-                      Container(
-                        child:
-                            const Padding(padding: EdgeInsets.only(left: 10)),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
                         children: [
-                          SizedBox(height: 2.2),
-                          Text("Address", style: TextStyle(fontSize: 16)),
-                          SizedBox(
-                            height: size.height * 0.03,
+                          Icon(
+                            Icons.my_location,
+                            color: Colors.black,
+                            size: 24.0,
                           ),
                           Container(
-                            child: Text(_myAddress),
-                            // child: TextFormField(
-                            //   controller: _address,
-                            //   decoration: InputDecoration(
-                            //     border: UnderlineInputBorder(),
-                            //     hintText: _myAddress,
-                            //   ),
-                            // ),
+                            child: Text(
+                              "Address",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            margin: EdgeInsets.only(left: 10),
                           ),
                         ],
-                      )
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 33),
+                        child: Text(
+                          _myAddress,
+                          softWrap: true,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(
                     height: size.height * 0.03,
                   ),
-                  Row(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // ignore: prefer_const_constructors
-                      Icon(
-                        Icons.my_location,
-                        color: Colors.black,
-                        size: 24.0,
-                      ),
-                      Container(
-                        child:
-                            const Padding(padding: EdgeInsets.only(left: 10)),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
                         children: [
-                          SizedBox(height: 2.2),
-                          Text("Room, floor,...(Optional)",
-                              style: TextStyle(fontSize: 16)),
-                          SizedBox(
-                            height: size.height * 0.03,
+                          Icon(
+                            Icons.my_location,
+                            color: Colors.black,
+                            size: 24.0,
                           ),
                           Container(
-                            width: size.width * 0.6,
-                            child: TextFormField(
-                              controller: _optional,
-                              decoration: InputDecoration(
-                                border: UnderlineInputBorder(),
-                                hintText: "...",
-                              ),
+                            child: Text(
+                              "Room, floor,...(Optional)",
+                              style: TextStyle(fontSize: 16),
                             ),
+                            margin: EdgeInsets.only(left: 10),
                           ),
                         ],
-                      )
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 33),
+                        width: size.width * 0.8,
+                        child: TextFormField(
+                          controller: _optional,
+                          decoration: InputDecoration(
+                            border: UnderlineInputBorder(),
+                            hintText: "...",
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -316,14 +303,15 @@ class _ReportState extends State<Report> {
                   SizedBox(
                     height: size.height * 0.03,
                   ),
-                  TextFormField(
+                  TextField(
                     controller: _moreDetails,
                     keyboardType: TextInputType.multiline,
-                    maxLines: null,
+                    minLines: 5,
+                    maxLines: 10,
                     decoration: const InputDecoration(
                         // ignore: unnecessary_const
                         contentPadding: const EdgeInsets.symmetric(
-                            vertical: 60.0, horizontal: 5.0),
+                            horizontal: 10.0, vertical: 10),
                         border: OutlineInputBorder()),
                   ),
                   SizedBox(
