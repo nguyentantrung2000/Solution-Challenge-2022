@@ -65,7 +65,7 @@ class _State extends State<landingPage4> {
                           ),
                         ),
                         onPressed: () => {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => MainPage(),

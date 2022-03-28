@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:permission_handler/permission_handler.dart';
 import './globalVar.dart' as globals;
+
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
   @override
@@ -23,7 +24,6 @@ class _SettingState extends State<Setting> {
         });
   }
 
-  
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -34,14 +34,12 @@ class _SettingState extends State<Setting> {
           crossAxisAlignment: CrossAxisAlignment.start,
           // ignore: prefer_const_literals_to_create_immutables
           children: [
-            SizedBox(width: size.width,height: size.height* 0.0 ),
+            SizedBox(width: size.width, height: size.height * 0.0),
             Text('Setting',
-            style: TextStyle(
-              color: Colors.black,
-        
-              fontSize:34,
-            )),
- 
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 34,
+                )),
 
             // Text('Setting',
             //     style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
@@ -70,13 +68,14 @@ class _SettingState extends State<Setting> {
                     iconSize: 26,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.black),
-                    value:globals.language,
+                    value: globals.language,
                     // style: TextStyle(fontWeight: FontWeight.bold),
                     isExpanded: true,
 
                     items: language.map(buildMenuItem).toList(),
-                    
-                    onChanged: (value) => setState(() => globals.language =value),
+
+                    onChanged: (value) =>
+                        setState(() => globals.language = value),
                   ),
                 ),
               ),

@@ -71,8 +71,8 @@ class _MapPageState extends State<MapPage> {
 
   getIcons() async {
     var icon = await BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), 'assets/images/circle7.png');
-       
+        const ImageConfiguration(), 'assets/images/circle7.png');
+
     setState(() {
       this.icon = icon;
     });
@@ -94,30 +94,23 @@ class _MapPageState extends State<MapPage> {
           : GoogleMap(
               mapType: MapType.terrain,
               markers: markers.map((s) {
-                if (s['myLocation'] == true) {
-                  return Marker(
-                    markerId: MarkerId(s['id']),
-                    infoWindow: InfoWindow(title: s['title']),
-                    icon: icon,
-                    position: (LatLng(s['lat'], s['long'])),
-                    onTap: () {},
-                  );
-                } else {
-                  return Marker(
-                    markerId: MarkerId(s['id']),
-                    infoWindow: InfoWindow(title: s['title']),
-                    icon: BitmapDescriptor.defaultMarkerWithHue(
-                        BitmapDescriptor.hueRed),
-                    position: (LatLng(s['lat'], s['long'])),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DetailScreen(s['id'])));
-                    },
-                  );
-                }
+                return Marker(
+                  markerId: MarkerId(s['id']),
+                  infoWindow: InfoWindow(title: s['title']),
+                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueRed,
+                  ),
+                  position: (LatLng(s['lat'], s['long'])),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DetailScreen(s['id'])));
+                  },
+                );
               }).toSet(),
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
               initialCameraPosition: CameraPosition(
                 target: LatLng(Latitude, Longitude),
                 zoom: 15,
