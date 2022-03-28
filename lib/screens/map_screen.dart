@@ -102,7 +102,7 @@ class _MapPageState extends State<MapPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => detail(s['id'])));
+                              builder: (context) => DetailScreen(s['id'])));
                     },
                   );
                 }

@@ -45,6 +45,7 @@ class ListViewPageState extends State<ListViewPage> {
     Size size = MediaQuery.of(context).size;
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: (Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,77 +81,75 @@ class ListViewPageState extends State<ListViewPage> {
               child: Column(
                 children: [
                   for (var i in cases)
-                    Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 1,
-                                blurRadius: 7,
-                                offset:
-                                    Offset(0, 10), // changes position of shadow
-                              ),
-                            ],
+                    Container(
+                      padding: EdgeInsets.only(bottom: size.height * 0.02),
+                      decoration: BoxDecoration(
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.grey.withOpacity(0.5),
+                          //     spreadRadius: 1,
+                          //     blurRadius: 5,
+                          //   ),
+                          // ],
                           ),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          detail(i['documentID'])));
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: i['data']['resolved']
-                                  ? Color(0xff219653)
-                                  : Color(0xffE0E0E0),
-                              minimumSize:
-                                  Size(size.width * 0.5, size.height * 0.07),
-                            ),
-                            child: Container(
-                              width: size.width * 0.8,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    i['data']['address'],
-                                    style: TextStyle(
-                                        color: i['data']['resolved']
-                                            ? Color(0xffFFFFFF)
-                                            : Color(0xff000000),
-                                        letterSpacing: 0.5),
-                                  ),
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          IconData(0xe22d,
-                                              fontFamily: 'MaterialIcons'),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetailScreen(i['documentID'])));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: i['data']['resolved']
+                              ? Color(0xff219653)
+                              : Color(0xffE0E0E0),
+                          minimumSize:
+                              Size(size.width * 0.5, size.height * 0.07),
+                        ),
+                        child: Container(
+                          width: size.width * 0.8,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: size.width * 0.7,
+                                child: Text(
+                                  i['data']['address'],
+                                  style: TextStyle(
+                                      color: i['data']['resolved']
+                                          ? Color(0xffFFFFFF)
+                                          : Color(0xff000000),
+                                      letterSpacing: 0.5),
+                                  softWrap: false,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              SizedBox(
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      IconData(0xe22d,
+                                          fontFamily: 'MaterialIcons'),
+                                      color: i['data']['resolved']
+                                          ? Color(0xffFFFFFF)
+                                          : Color(0xff000000),
+                                    ),
+                                    Text(
+                                      i['data']['logs'].length.toString(),
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
                                           color: i['data']['resolved']
                                               ? Color(0xffFFFFFF)
-                                              : Color(0xff000000),
-                                        ),
-                                        Text(
-                                          i['data']['logs'].length.toString(),
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              color: i['data']['resolved']
-                                                  ? Color(0xffFFFFFF)
-                                                  : Color(0xff000000)),
-                                        ),
-                                      ],
+                                              : Color(0xff000000)),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        SizedBox(height: size.height * 0.03),
-                      ],
+                      ),
                     )
                 ],
               ),

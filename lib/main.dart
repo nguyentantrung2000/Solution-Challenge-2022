@@ -48,8 +48,10 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        debugShowCheckedModeBanner: false,
+        debugShowMaterialGrid: false,
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-        home: landingPage());
+        home: const landingPage());
   }
 }
 
@@ -66,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // body: screens[currentIndex], 
+        // body: screens[currentIndex],
 
         );
   }
