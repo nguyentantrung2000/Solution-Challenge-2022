@@ -67,11 +67,23 @@ class _MapPageState extends State<MapPage> {
         });
   }
 
+  late BitmapDescriptor icon;
+
+  getIcons() async {
+    var icon = await BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), 'assets/images/circle7.png');
+       
+    setState(() {
+      this.icon = icon;
+    });
+  }
+
   void initState() {
     // TODO: implement initState
-    super.initState();
+    getIcons();
     determinePosition();
     getData();
+    super.initState();
   }
 
   @override
@@ -86,8 +98,7 @@ class _MapPageState extends State<MapPage> {
                   return Marker(
                     markerId: MarkerId(s['id']),
                     infoWindow: InfoWindow(title: s['title']),
-                    icon: BitmapDescriptor.defaultMarkerWithHue(
-                        BitmapDescriptor.hueBlue),
+                    icon: icon,
                     position: (LatLng(s['lat'], s['long'])),
                     onTap: () {},
                   );
